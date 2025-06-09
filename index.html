@@ -6,6 +6,56 @@
 </head>
 <body style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 40px;">
   <h1>🧠 AVB AI Writer</h1>
-  <p>Generate social content based on your brand tone.</p>
+  <form id="form">
+    <label>Brand:
+      <select name="brand">
+        <option value="aveba">Aveba</option>
+        <option value="maxiemizer">Maxiemizer</option>
+      </select>
+    </label><br /><br />
+
+    <label>Platform:
+      <input name="platform" type="text" placeholder="e.g. Instagram Post" required />
+    </label><br /><br />
+
+    <label>Topic:
+      <input name="topic" type="text" placeholder="e.g. Manual follow-ups" required />
+    </label><br /><br />
+
+    <label>Angle:
+      <input name="angle" type="text" placeholder="e.g. Pain point or mindset shift" />
+    </label><br /><br />
+
+    <label>Extra Context:
+      <textarea name="context" placeholder="Anything you want the AI to include..."></textarea>
+    </label><br /><br />
+
+    <button type="submit">Generate</button>
+  </form>
+
+  <pre id="output" style="margin-top: 30px; white-space: pre-wrap;"></pre>
+
+  <script>
+    document.getElementById('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        brand: form.brand.value,
+        platform: form.platform.value,
+        topic: form.topic.value,
+        angle: form.angle.value,
+        context: form.context.value
+      };
+
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      document.getElementById('output').textContent = result.content || 'Something went wrong.';
+    });
+  </script>
 </body>
 </html>
